@@ -1,0 +1,57 @@
+<div class="login-wrapper">
+  <div class="card shadow">
+    
+    <div class="login-header">
+      <h2 *ngIf="!mostrar2FA">Bienvenido a <span class="brand">Mind Games</span> 🧠</h2>
+      <h2 *ngIf="mostrar2FA">Casi listo... 🛡️</h2>
+    </div>
+
+    <div class="form-section" *ngIf="!mostrar2FA">
+      <div class="input-group">
+        <label>Correo Electrónico</label>
+        <input type="email" placeholder="ejemplo@correo.com" [(ngModel)]="user.email">
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••" [(ngModel)]="user.password">
+      </div>
+
+      <button class="btn-primary" (click)="iniciarSesion()">
+        <span>Entrar</span>
+      </button>
+    </div>
+
+    <div class="register-link">
+      <p>
+        ¿No tienes cuenta?
+        <a routerLink="/register">Regístrate aquí</a>
+      </p>
+    </div>
+
+    <div class="form-section 2fa-fade" *ngIf="mostrar2FA">
+      <p class="info-text">Hemos enviado un código de seguridad a tu correo. Por favor, ingrésalo para continuar.</p>
+      
+      <div class="input-group">
+        <input type="text" 
+               class="otp-input" 
+               placeholder="000000" 
+               maxlength="6" 
+               [(ngModel)]="codigo">
+      </div>
+
+      <button class="btn-success" (click)="verificarCodigo()">
+        Verificar Identidad
+      </button>
+      
+      <button class="btn-link" (click)="mostrar2FA = false">
+        Regresar al login
+      </button>
+    </div>
+
+    <div class="message-box" [ngClass]="{'error': mensaje.includes('Error'), 'info': !mensaje.includes('Error')}" *ngIf="mensaje">
+      <p>{{ mensaje }}</p>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="home-wrapper">
+  <nav class="navbar">
+    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
+    <div class="nav-actions">
+      <button *ngIf="esAdmin()" routerLink="/admin" class="btn-admin">
+        <i class="pi pi-cog"></i> Panel Admin
+      </button>
+      <button (click)="logout()" class="btn-logout">
+        🚪 Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <header class="hero-section">
+      <h1>¡Hola, Jugador!</h1>
+      <p class="subtitle">Explora, aprende y entrena tu mente</p>
+      
+      <div class="search-container">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          placeholder="¿Qué quieres jugar hoy?"
+          (input)="searchText.set($any($event.target).value)"
+          class="search-bar"
+        />
+      </div>
+    </header>
+
+    <section class="games-grid">
+      <div *ngFor="let juego of juegosFiltrados()" class="game-card">
+        <div class="game-info">
+          <h3>{{ juego.nombre }}</h3>
+          <p>{{ juego.descripcion }}</p>
+        </div>
+        <button [routerLink]="['/' + juego.nombre.toLowerCase()]" class="btn-play">
+          ▶️ Jugar ahora
+        </button>
+      </div>
+    </section>
+
+    <!--buscador-->
+    <hr>
+    <h2>Buscador Avanzado con Elasticsearch</h2>
+    <div class="elastic-container">
+      <input
+        type="text"
+        placeholder="Buscar con Elasticsearch..."
+        [(ngModel)]="elasticQuery"
+      >
+      <button (click)="buscarElastic()">
+        Buscar en Elasticsearch
+      </button>
+
+    </div>
+    <div class="elastic-results">
+
+      <div
+        class="elastic-card"
+        *ngFor="let item of elasticResultados"
+      >
+        <h3>{{ item.titulo }}</h3>
+
+        <p>{{ item.descripcion }}</p>
+      </div>
+    </div>
+
+
+    <footer class="learning-section">
+      <h3>Aprende más</h3>
+      <div class="info-links">
+        <a href="https://es.wikipedia.org/wiki/Sudoku" target="_blank" class="info-card">
+           ♟️ Sudoku
+        </a>
+        <a href="https://es.wikipedia.org/wiki/Crucigrama" target="_blank" class="info-card">
+           🧩 Crucigrama
+        </a>
+      </div>
+      <p class="status-tag">🚀 {{ mensajeBackend() }}</p>
+    </footer>
+  </div>
+</div>

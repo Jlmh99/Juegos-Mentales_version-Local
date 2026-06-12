@@ -1,0 +1,190 @@
+<div class="admin-layout">
+  <nav class="navbar">
+    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
+    <div class="nav-actions">
+      <button *ngIf="esAdmin()" routerLink="/admin" class="btn-admin">
+        <i class="pi pi-cog"></i> Panel Admin
+      </button>
+      <button (click)="logout()" class="btn-logout">
+        🚪 Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <section class="admin-card">
+    <div class="card-header">
+      <i class="pi pi-user-plus"></i>
+      <h3>Registrar Nuevo Usuario</h3>
+    </div>
+    
+    <div class="form-grid">
+      <div class="input-field">
+        <label>Nombre de Usuario</label>
+        <input type="text" placeholder="Ej. Juanito123" [(ngModel)]="nuevoUsuario.username">
+      </div>
+
+      <div class="input-field">
+        <label>Correo Electrónico</label>
+        <input type="email" placeholder="correo@uteq.edu.mx" [(ngModel)]="nuevoUsuario.email">
+      </div>
+
+      <div class="input-field">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••" [(ngModel)]="nuevoUsuario.password">
+      </div>
+
+      <div class="input-field">
+        <label>Rol de Acceso</label>
+        <select [(ngModel)]="nuevoUsuario.rol">
+          <option value="USER">Usuario Estándar</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-save" (click)="crear()">
+      <i class="pi pi-check"></i> Guardar Usuario
+    </button>
+  </section>
+
+  <section class="table-container">
+    <div class="table-header">
+      <h3>Usuarios Registrados</h3>
+      <span class="user-count">{{ usuarios().length }} usuarios en total</span>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of usuarios()">
+          <td><strong>{{ user.username }}</strong></td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span [ngClass]="{
+              'badge-admin': user.rol === 'ADMIN',
+              'badge-user': user.rol === 'USER'
+            }">
+              {{ user.rol }}
+            </span>
+          </td>
+          <td class="text-center">
+            <button class="btn-edit" (click)="abrirModalEditar(user)">
+              ✏️
+            </button>
+            <button 
+              class="btn-delete" 
+              (click)="abrirModalEliminar(user)"
+              [disabled]="esUsuarioActual(user)"
+              title="No puedes eliminarte a ti mismo">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="modal-overlay" *ngIf="mostrarModalEditar">
+    <div class="modal-box">
+
+      <h3>✏️ Editar Usuario</h3>
+
+      <!-- USERNAME -->
+      <div class="input-group">
+        <label>Usuario</label>
+        <input [(ngModel)]="usuarioEditando.username" required>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="usuarioEditando.email" required>
+      </div>
+
+      <!-- ROL -->
+      <div class="input-group">
+        <label>Rol</label>
+        <select 
+          [(ngModel)]="usuarioEditando.rol"
+          [disabled]="esUsuarioActual(usuarioEditando)">
+          <option value="USER">USER</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+
+        <small *ngIf="esUsuarioActual(usuarioEditando)" class="warning-text">
+          ⚠️ No puedes cambiar tu propio rol
+        </small>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="input-group">
+        <label>Nueva contraseña</label>
+        <input 
+          type="password" 
+          placeholder="Opcional"
+          [(ngModel)]="usuarioEditando.password">
+
+        <small>Déjalo vacío si no deseas cambiarla</small>
+      </div>
+
+      <!-- 2FA -->
+      <div class="input-group checkbox-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="usuarioEditando.twoFactorEnabled">
+          Activar verificación en dos pasos (2FA)
+        </label>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cerrarModalEditar()">Cancelar</button>
+
+        <button 
+          class="btn-confirm" 
+          (click)="guardarCambios()"
+          [disabled]="!usuarioEditando.username || !usuarioEditando.email">
+          Guardar Cambios
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarModal">
+    <div class="modal-box">
+
+      <h3>⚠️ Eliminar Usuario</h3>
+      <p class="danger-text">
+        Esta acción no se puede deshacer
+      </p>
+
+      <p>
+        ¿Estás seguro de eliminar a 
+        <strong>{{ usuarioAEliminar?.username }}</strong>?
+      </p>
+
+      <small style="color: gray;">
+        {{ usuarioAEliminar?.email }}
+      </small>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cerrarModal()">
+          Cancelar
+        </button>
+
+        <button class="btn-confirm" (click)="confirmarEliminar()">
+          Eliminar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
