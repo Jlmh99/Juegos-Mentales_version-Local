@@ -1,6 +1,28 @@
-<div class="home-wrapper">
+<div class="home-wrapper" [ngClass]="currentSeasonClass()">
+  
+  <div *ngIf="currentSeasonClass() === 'summer-event-theme'" class="top-calendar-banner">
+    <p>{{ announcementBanner() }}</p>
+  </div>
+
   <nav class="navbar">
     <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
+    
+    <div class="nav-links">
+      <div class="menu-pointer-container" (mouseleave)="closeGameMenu()">
+        <button class="btn-nav menu-trigger-btn" (mouseenter)="openGameMenu()">
+          🎮 Categorías/Juegos ▾
+        </button>
+        
+        <div class="games-dropdown" [class.show-dropdown]="isGameMenuOpen()">
+          <a routerLink="/sudoku" class="dropdown-item">🔢 Sudoku</a>
+          <a routerLink="/crucigrama" class="dropdown-item">🧩 Crucigrama</a>
+        </div>
+      </div>
+
+      <button routerLink="/dom-demo" class="btn-nav">🎨 DOM Demo</button>
+      <button routerLink="/task-manager" class="btn-nav">✅ Tareas</button>
+    </div>
+
     <div class="nav-actions">
       <button *ngIf="esAdmin()" routerLink="/admin" class="btn-admin">
         <i class="pi pi-cog"></i> Panel Admin
@@ -39,7 +61,6 @@
       </div>
     </section>
 
-    <!--buscador-->
     <hr>
     <h2>Buscador Avanzado con Elasticsearch</h2>
     <div class="elastic-container">
@@ -51,20 +72,14 @@
       <button (click)="buscarElastic()">
         Buscar en Elasticsearch
       </button>
-
     </div>
+
     <div class="elastic-results">
-
-      <div
-        class="elastic-card"
-        *ngFor="let item of elasticResultados"
-      >
+      <div class="elastic-card" *ngFor="let item of elasticResultados">
         <h3>{{ item.titulo }}</h3>
-
         <p>{{ item.descripcion }}</p>
       </div>
     </div>
-
 
     <footer class="learning-section">
       <h3>Aprende más</h3>

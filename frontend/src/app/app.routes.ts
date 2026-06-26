@@ -3,10 +3,12 @@ import { adminGuard } from './guards/admin-guard';
 import { authGuard } from './guards/auth-guard';
 import { Admin } from './pages/admin/admin'; // El componente que quieres proteger
 import { Crucigrama } from './pages/crucigrama/crucigrama';
+import { DomDemo } from './pages/dom-demo/dom-demo';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Sudoku } from './pages/sudoku/sudoku';
+import { TaskManager } from './pages/task-manager/task-manager';
 
 export const routes: Routes = [
     // 1. Rutas Públicas
@@ -19,6 +21,16 @@ export const routes: Routes = [
     { 
         path: 'home', 
         component: Home, 
+        canActivate: [authGuard] 
+    },
+    { 
+        path: 'dom-demo', 
+        component: DomDemo, 
+        canActivate: [authGuard] 
+    },
+    { 
+        path: 'task-manager', 
+        component: TaskManager, 
         canActivate: [authGuard] 
     },
 

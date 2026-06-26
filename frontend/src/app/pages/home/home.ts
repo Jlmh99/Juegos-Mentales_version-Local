@@ -8,54 +8,72 @@ import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule,RouterLink,FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
-//esto es para los link externos
-  protected readonly title = signal('frontend');
   
-  mensajeBackend = signal(''); // Señal para guardar la respuesta del backend
+  protected readonly title = signal('frontend');
+  mensajeBackend = signal('');
 
   // =======================
-// BUSCADOR ELASTICSEARCH
-// =======================
+  // BUSCADOR ELASTICSEARCH
+  // =======================
+  elasticQuery = '';
+  elasticResultados: any[] = [];
 
-elasticQuery = '';
-elasticResultados: any[] = [];
+  // ==========================================
+  // PRÁCTICA 7: MENÚ BASADO EN EVENTOS DE PUNTERO
+  // ==========================================
+  isGameMenuOpen = signal(false);
+
+  // ==========================================
+  // PRÁCTICA 8: EVENTO BASADO EN PERIODO (CALENDARIO)
+  // ==========================================
+  currentSeasonClass = signal('normal-season');
+  announcementBanner = signal('');
 
   constructor(private api: ApiService, private auth: AuthService) {}
 
   ngOnInit() {
+    // Inicializar la validación del calendario estacional
+    this.checkCalendarEvent();
 
-    //este es para el mensajeBackend
     this.auth.test().subscribe(res => {
-    this.mensajeBackend.set(res);
+      this.mensajeBackend.set(res);
     });
 
     this.auth.test().subscribe({
-    next: res => this.mensajeBackend.set(res),
-    error: err => console.error("Error detallado:", err)
-});
-
+      next: res => this.mensajeBackend.set(res),
+      error: err => console.error("Error detallado:", err)
+    });
   }
- //para la busqueda interna
-  searchText = signal('');
 
-  juegos = signal([
-    {
-      nombre: 'Sudoku',
-      descripcion: 'Juego lógico numérico que estimula la mente.',
-      ruta: '#'
-    },
-    {
-      nombre: 'Crucigrama',
-      descripcion: 'Juego de palabras que mejora el vocabulario.',
-      ruta: '#'
+  // Evalúa las fechas del sistema para cambiar la UI por periodo
+  checkCalendarEvent() {
+    const today = new Date();
+    const month = today.getMonth(); // 5 = Junio, 6 = Julio (Temporada de Verano)
+
+    // Si el mes actual es Junio o Julio, activamos el banner y tema estacional
+    if (month === 10 || month === 11) {
+      this.currentSeasonClass.set('summer-event-theme');
+      this.announcementBanner.set('☀️ ¡Bienvenido al Evento de Verano en Mind Games! Potencia tu mente en estas vacaciones ☀️');
+    } else {
+      this.currentSeasonClass.set('normal-season');
+      this.announcementBanner.set('');
     }
+  }
+
+  openGameMenu() { this.isGameMenuOpen.set(true); }
+  closeGameMenu() { this.isGameMenuOpen.set(false); }
+
+  searchText = signal('');
+  juegos = signal([
+    { nombre: 'Sudoku', descripcion: 'Juego lógico numérico que estimula la mente.', ruta: '#' },
+    { nombre: 'Crucigrama', descripcion: 'Juego de palabras que mejora el vocabulario.', ruta: '#' }
   ]);
 
   juegosFiltrados = computed(() =>
@@ -65,34 +83,25 @@ elasticResultados: any[] = [];
   );
 
   esAdmin(): boolean {
-
-    // Solo ejecutamos si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       return user.rol === 'ADMIN';
     }
-    
-    return false; // Si está en el servidor, por defecto no es admin
+    return false;
   }
 
   logout() {
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.removeItem('user'); // Borramos los datos
-    this.router.navigate(['/login']); // Directo al login
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('user');
+      this.router.navigate(['/login']);
     }
   }
 
   buscarElastic() {
     this.auth.search(this.elasticQuery)
       .subscribe({
-        next: (data) => {
-          this.elasticResultados = data;
-          console.log('Elastic Results:', data);
-        },
-
-        error: (err) => {
-          console.error('Error Elastic:', err);
-        }
+        next: (data) => { this.elasticResultados = data; },
+        error: (err) => { console.error('Error Elastic:', err); }
       });
   }
 }

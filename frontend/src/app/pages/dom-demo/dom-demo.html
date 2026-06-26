@@ -1,0 +1,86 @@
+<div class="demo-wrapper">
+  <nav class="navbar">
+    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
+    <div class="nav-actions">
+      <button routerLink="/home" class="btn-back">← Volver al inicio</button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>🎨 Demostración del DOM</h1>
+    <p class="subtitle">Interactúa con los elementos para ver el DOM en acción</p>
+
+    <!-- Sección 1: Modificar contenido -->
+    <section class="demo-section">
+      <h2>1. Modificar Contenido</h2>
+      <div class="demo-box" id="caja-contenido">
+        <p id="texto-demo">Este es el texto original del párrafo.</p>
+      </div>
+      <div class="controls">
+        <input type="text" id="nuevo-texto" placeholder="Escribe nuevo texto..." class="demo-input" />
+        <button (click)="cambiarTexto()" class="btn-demo">Cambiar Texto</button>
+        <button (click)="restaurarTexto()" class="btn-demo btn-secondary">Restaurar</button>
+      </div>
+    </section>
+
+    <!-- Sección 2: Modificar estilos -->
+    <section class="demo-section">
+      <h2>2. Modificar Estilos</h2>
+      <div class="demo-box">
+        <div id="caja-estilos" class="caja-visual">
+          ¡Cámbiame con los botones!
+        </div>
+      </div>
+      <div class="controls">
+        <button (click)="cambiarColor('rojo')"    class="btn-demo" style="background:#e74c3c">🔴 Rojo</button>
+        <button (click)="cambiarColor('azul')"    class="btn-demo" style="background:#3498db">🔵 Azul</button>
+        <button (click)="cambiarColor('verde')"   class="btn-demo" style="background:#2ecc71">🟢 Verde</button>
+        <button (click)="cambiarColor('morado')"  class="btn-demo" style="background:#9b59b6">🟣 Morado</button>
+        <button (click)="toggleTamano()"          class="btn-demo btn-secondary">🔠 Toggle Tamaño</button>
+        <button (click)="toggleBorde()"           class="btn-demo btn-secondary">⬜ Toggle Borde</button>
+      </div>
+    </section>
+
+    <!-- Sección 3: Crear y eliminar elementos -->
+    <section class="demo-section">
+      <h2>3. Crear y Eliminar Elementos</h2>
+      <div class="controls">
+        <input type="text" id="texto-nuevo-elem" placeholder="Texto del nuevo elemento..." class="demo-input" />
+        <button (click)="agregarElemento()" class="btn-demo">➕ Agregar</button>
+        <button (click)="eliminarUltimo()"  class="btn-demo btn-danger">🗑️ Eliminar último</button>
+        <button (click)="limpiarLista()"    class="btn-demo btn-secondary">🧹 Limpiar todo</button>
+      </div>
+      <div id="lista-elementos" class="lista-dinamica">
+        <p class="placeholder-msg" *ngIf="elementos().length === 0">No hay elementos. ¡Agrega uno!</p>
+        <div *ngFor="let elem of elementos(); let i = index" class="elemento-item">
+          <span>{{ elem }}</span>
+          <button (click)="eliminarElemento(i)" class="btn-mini-danger">✕</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 4: Eventos del usuario -->
+    <section class="demo-section">
+      <h2>4. Eventos del Usuario</h2>
+      <div class="demo-box eventos-box">
+        <div
+          id="zona-eventos"
+          class="zona-interactiva"
+          (click)="registrarEvento('click')"
+          (mouseenter)="registrarEvento('mouseenter')"
+          (mouseleave)="registrarEvento('mouseleave')"
+          (dblclick)="registrarEvento('doble click')"
+        >
+          Interactúa conmigo<br>
+          <small>(click, doble click, hover)</small>
+        </div>
+        <div class="log-eventos">
+          <p *ngFor="let log of logs()" class="log-item">{{ log }}</p>
+          <p *ngIf="logs().length === 0" class="placeholder-msg">Los eventos aparecerán aquí...</p>
+        </div>
+      </div>
+      <button (click)="limpiarLogs()" class="btn-demo btn-secondary">🧹 Limpiar log</button>
+    </section>
+
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="task-wrapper">
+  <nav class="navbar">
+    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
+    <div class="nav-actions">
+      <button routerLink="/home" class="btn-back">← Volver al inicio</button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>✅ Administrador de Tareas</h1>
+    <p class="subtitle">Crea, edita y elimina tareas con el DOM</p>
+
+    <!-- Formulario -->
+    <div class="form-card">
+      <h2>{{ editandoId() !== null ? '✏️ Editar Tarea' : '➕ Nueva Tarea' }}</h2>
+      <div class="form-row">
+        <input
+          type="text"
+          id="input-titulo"
+          placeholder="Título de la tarea *"
+          class="form-input"
+        />
+        <select id="select-prioridad" class="form-select">
+          <option value="alta">🔴 Alta</option>
+          <option value="media">🟡 Media</option>
+          <option value="baja">🟢 Baja</option>
+        </select>
+      </div>
+      <textarea
+        id="input-desc"
+        placeholder="Descripción (opcional)"
+        class="form-textarea"
+        rows="2"
+      ></textarea>
+      <div class="form-actions">
+        <button (click)="guardarTarea()" class="btn-primary">
+          {{ editandoId() !== null ? '💾 Guardar cambios' : '➕ Agregar tarea' }}
+        </button>
+        <button *ngIf="editandoId() !== null" (click)="cancelarEdicion()" class="btn-secondary">
+          ✕ Cancelar
+        </button>
+      </div>
+      <p *ngIf="errorMsg()" class="error-msg">⚠️ {{ errorMsg() }}</p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <button
+        *ngFor="let f of filtros"
+        (click)="filtroActivo.set(f.valor)"
+        [class.activo]="filtroActivo() === f.valor"
+        class="btn-filtro"
+      >
+        {{ f.label }} <span class="badge">{{ contarPorFiltro(f.valor) }}</span>
+      </button>
+    </div>
+
+    <!-- Lista de tareas -->
+    <div class="tasks-container">
+      <p *ngIf="tareasFiltradas().length === 0" class="empty-msg">
+        No hay tareas {{ filtroActivo() !== 'todas' ? 'en esta categoría' : '' }}. ¡Agrega una!
+      </p>
+
+      <div
+        *ngFor="let tarea of tareasFiltradas()"
+        class="task-card"
+        [class.completada]="tarea.completada"
+        [class.prioridad-alta]="tarea.prioridad === 'alta'"
+        [class.prioridad-media]="tarea.prioridad === 'media'"
+        [class.prioridad-baja]="tarea.prioridad === 'baja'"
+      >
+        <div class="task-header">
+          <div class="task-titulo-row">
+            <input
+              type="checkbox"
+              [checked]="tarea.completada"
+              (change)="toggleCompletada(tarea.id)"
+              class="task-check"
+            />
+            <h3 [class.tachado]="tarea.completada">{{ tarea.titulo }}</h3>
+            <span class="badge-prioridad badge-{{ tarea.prioridad }}">
+              {{ tarea.prioridad }}
+            </span>
+          </div>
+          <div class="task-actions">
+            <button (click)="iniciarEdicion(tarea)" class="btn-edit" title="Editar">✏️</button>
+            <button (click)="eliminarTarea(tarea.id)" class="btn-delete" title="Eliminar">🗑️</button>
+          </div>
+        </div>
+        <p *ngIf="tarea.descripcion" class="task-desc">{{ tarea.descripcion }}</p>
+        <small class="task-fecha">📅 {{ tarea.fecha }}</small>
+      </div>
+    </div>
+
+    <!-- Footer resumen -->
+    <div class="resumen">
+      <span>Total: <strong>{{ tareas().length }}</strong></span>
+      <span>Completadas: <strong>{{ tareasCompletadas() }}</strong></span>
+      <span>Pendientes: <strong>{{ tareas().length - tareasCompletadas() }}</strong></span>
+      <button (click)="eliminarCompletadas()" class="btn-limpiar" *ngIf="tareasCompletadas() > 0">
+        🧹 Eliminar completadas
+      </button>
+    </div>
+
+  </div>
+</div>

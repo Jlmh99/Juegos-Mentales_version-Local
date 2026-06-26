@@ -1,0 +1,184 @@
+/* Reutiliza el estilo general del home */
+.demo-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-brand {
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #a78bfa;
+}
+
+.btn-back {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-back:hover { background: rgba(255,255,255,0.2); }
+
+.main-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 { font-size: 2rem; margin-bottom: 0.3rem; }
+.subtitle { color: #a78bfa; margin-bottom: 2rem; }
+
+.demo-section {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.demo-section h2 { margin-top: 0; color: #c4b5fd; }
+
+.demo-box {
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.caja-visual {
+  background: #6d28d9;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.demo-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.demo-input::placeholder { color: rgba(255,255,255,0.4); }
+
+.btn-demo {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #7c3aed;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.btn-demo:hover { background: #6d28d9; }
+.btn-demo.btn-secondary { background: rgba(255,255,255,0.15); }
+.btn-demo.btn-secondary:hover { background: rgba(255,255,255,0.25); }
+.btn-demo.btn-danger { background: #dc2626; }
+.btn-demo.btn-danger:hover { background: #b91c1c; }
+
+/* Lista dinámica */
+.lista-dinamica {
+  min-height: 60px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.elemento-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(124,58,237,0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.btn-mini-danger {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+/* Zona de eventos */
+.eventos-box { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.zona-interactiva {
+  flex: 1;
+  min-width: 180px;
+  background: #7c3aed;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, transform 0.1s;
+  font-weight: bold;
+}
+.zona-interactiva:hover { background: #6d28d9; transform: scale(1.02); }
+.zona-interactiva:active { transform: scale(0.98); }
+
+.log-eventos {
+  flex: 1;
+  min-width: 180px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 0.75rem;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+
+.log-item {
+  margin: 0.2rem 0;
+  color: #a78bfa;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 0.2rem;
+}
+
+.placeholder-msg { color: rgba(255,255,255,0.3); font-style: italic; }
