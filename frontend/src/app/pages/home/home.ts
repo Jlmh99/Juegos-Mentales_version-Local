@@ -58,7 +58,7 @@ export class Home implements OnInit {
     const month = today.getMonth(); // 5 = Junio, 6 = Julio (Temporada de Verano)
 
     // Si el mes actual es Junio o Julio, activamos el banner y tema estacional
-    if (month === 10 || month === 11) {
+    if (month === 6 || month === 7) {
       this.currentSeasonClass.set('summer-event-theme');
       this.announcementBanner.set('☀️ ¡Bienvenido al Evento de Verano en Mind Games! Potencia tu mente en estas vacaciones ☀️');
     } else {

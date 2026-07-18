@@ -24,6 +24,9 @@ export class Admin implements OnInit {
   usuarios = signal<any[]>([]);
   usuarioActual = JSON.parse(localStorage.getItem('user') || '{}');
 
+  // PARTE 3: Bitácora de Auditoría Reactiva
+  bitacora = signal<any[]>([]);
+
   nuevoUsuario = {
     username: '',
     email: '',
@@ -35,6 +38,7 @@ export class Admin implements OnInit {
 
   ngOnInit() {
     this.cargarUsuarios();
+    this.cargarBitacora();
   }
 
   cargarUsuarios() {
@@ -43,21 +47,57 @@ export class Admin implements OnInit {
     });
   }
 
-  eliminar(id: number) {
-  this.auth.deleteUser(id).subscribe({
-    next: () => {
-      // Actualiza la lista localmente sin esperar al servidor
-      this.usuarios.set(this.usuarios().filter(u => u.id !== id));
-    },
-    error: (err) => {
-      console.error('Error al eliminar usuario:', err);
+  // Carga el historial persistido en caché o inicializa semillas si está vacío
+  cargarBitacora() {
+    if (isPlatformBrowser(this.platformId)) {
+      if (!localStorage.getItem('bitacora')) {
+        const datosSemilla = [
+          { usuario: 'juan@uteq.edu.mx', fecha: '17/07/2026', hora: '10:14:22', ip: '192.168.1.64', accion: 'Inicio de sesión' },
+          { usuario: 'admin@mindgames.com', fecha: '17/07/2026', hora: '11:02:05', ip: '192.168.1.100', accion: 'Alta de usuarios' },
+          { usuario: 'luis@gaming.com', fecha: '17/07/2026', hora: '14:30:00', ip: '187.210.45.12', accion: 'Cambio de contraseña' }
+        ];
+        localStorage.setItem('bitacora', JSON.stringify(datosSemilla));
+      }
+      this.bitacora.set(JSON.parse(localStorage.getItem('bitacora') || '[]'));
     }
-  });
-}
+  }
+
+  // Registra un evento de seguridad dinámicamente en el historial
+  registrarEventoAuditoria(accion: string, afectado: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      const ahora = new Date();
+      const nuevoLog = {
+        usuario: this.usuarioActual.email || this.usuarioActual.username || 'ADMIN',
+        fecha: ahora.toLocaleDateString(),
+        hora: ahora.toLocaleTimeString(),
+        ip: '192.168.1.64', // IP de auditoría local simulada
+        accion: `${accion} -> [${afectado}]`
+      };
+
+      const bitacoraActual = [nuevoLog, ...this.bitacora()];
+      localStorage.setItem('bitacora', JSON.stringify(bitacoraActual));
+      this.bitacora.set(bitacoraActual);
+    }
+  }
+
+  eliminar(id: number) {
+    const correoAfectado = this.usuarioAEliminar?.email || `ID: ${id}`;
+    this.auth.deleteUser(id).subscribe({
+      next: () => {
+        this.usuarios.set(this.usuarios().filter(u => u.id !== id));
+        this.registrarEventoAuditoria('Eliminación de usuario', correoAfectado);
+      },
+      error: (err) => {
+        console.error('Error al eliminar usuario:', err);
+      }
+    });
+  }
 
   crear() {
+    const correoCreado = this.nuevoUsuario.email;
     this.auth.createUser(this.nuevoUsuario).subscribe(() => {
       this.cargarUsuarios();
+      this.registrarEventoAuditoria('Alta de usuarios', correoCreado);
       this.nuevoUsuario = { username: '', email: '', password: '', rol: 'USER' };
     });
   }
@@ -68,25 +108,31 @@ export class Admin implements OnInit {
   }
 
   guardarCambios() {
-    // 1. Creamos una copia para no afectar el objeto original del formulario
     const userEnviar = { ...this.usuarioEditando };
+    const originalUser = this.usuarios().find(u => u.id === userEnviar.id);
 
-    // 2. Limpieza de datos: si el campo password está vacío, lo eliminamos
-    // Esto evita enviar una cadena vacía al servidor y que se guarde mal
     if (!userEnviar.password || userEnviar.password.trim() === '') {
       delete userEnviar.password;
     }
 
-    // 3. Enviamos la copia (userEnviar) en lugar del objeto original
     this.auth.updateUser(userEnviar.id, userEnviar)
       .subscribe({
         next: () => {
           this.cargarUsuarios();
+          
+          // Auditar si cambió el Rol o datos comunes
+          if (originalUser && originalUser.rol !== userEnviar.rol) {
+            this.registrarEventoAuditoria(`Cambios de roles (${originalUser.rol} a ${userEnviar.rol})`, userEnviar.email);
+          } else if (userEnviar.password) {
+            this.registrarEventoAuditoria('Cambio de contraseña (por Admin)', userEnviar.email);
+          } else {
+            this.registrarEventoAuditoria('Edición de usuario', userEnviar.email);
+          }
+
           this.cerrarModalEditar();
         },
         error: (err) => {
           console.error('Error al actualizar el usuario:', err);
-          // Aquí podrías añadir una alerta para el usuario
         }
       });
   }
@@ -114,24 +160,22 @@ export class Admin implements OnInit {
   }
 
   esUsuarioActual(user: any): boolean {
-    return user.id === this.usuarioActual.id;
+    return user && this.usuarioActual && user.id === this.usuarioActual.id;
   }
 
   esAdmin(): boolean {
-
-    // Solo ejecutamos si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       return user.rol === 'ADMIN';
     }
-    
-    return false; // Si está en el servidor, por defecto no es admin
+    return false;
   }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('user'); // Borramos los datos
-      this.router.navigate(['/login']); // Directo al login
+      this.registrarEventoAuditoria('Cierre de sesión', this.usuarioActual.email || 'ADMIN');
+      localStorage.removeItem('user');
+      this.router.navigate(['/login']);
     }
   }
 }

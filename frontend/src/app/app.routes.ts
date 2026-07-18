@@ -6,6 +6,7 @@ import { Crucigrama } from './pages/crucigrama/crucigrama';
 import { DomDemo } from './pages/dom-demo/dom-demo';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
+import { Profile } from './pages/profile/profile';
 import { Register } from './pages/register/register';
 import { Sudoku } from './pages/sudoku/sudoku';
 import { TaskManager } from './pages/task-manager/task-manager';
@@ -31,6 +32,11 @@ export const routes: Routes = [
     { 
         path: 'task-manager', 
         component: TaskManager, 
+        canActivate: [authGuard] 
+    },
+    { 
+        path: 'profile', 
+        component: Profile, 
         canActivate: [authGuard] 
     },
 

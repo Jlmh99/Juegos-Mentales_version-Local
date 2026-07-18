@@ -56,22 +56,71 @@
   padding: 0 5% 3rem;
 }
 
+/* Cuadrícula de Juegos - Tarjeta en Estado Base */
 .game-card {
   background: white;
   border-radius: 15px;
   padding: 2rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: transform 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative; /* Necesario para posicionar el rayo de sol interno */
+  overflow: hidden; /* Corta el destello para que no se salga de las esquinas redondeadas */
+  border: 2px solid transparent;
+  
+  /* Suavizado de la transición general de la tarjeta */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease;
 }
 
-.game-card:hover { transform: translateY(-5px); }
+/* Capa oculta para el Efecto Rayo de Sol (Destello Veraniego) */
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  /* Degradado radial que simula un destello solar cálido */
+  background: radial-gradient(circle, rgba(251,191,36,0.25) 0%, rgba(251,191,36,0) 70%);
+  transform: translate(-50%, -50%) scale(0); /* Empieza completamente pequeño e invisible */
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none; /* Evita que interfiera con los clics del botón */
+  z-index: 1;
+}
 
+/* EVENTO HOVER: Destacar contenido con tematica de verano */
+.game-card:hover {
+  transform: translateY(-8px); /* Eleva sutilmente la tarjeta */
+  box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.15), 
+              0 10px 10px -5px rgba(245, 158, 11, 0.05); /* Sombra cálida/ámbar de verano */
+  border-color: #f59e0b; /* Borde color oro/sol */
+}
+
+/* Al pasar el puntero, el rayo de sol se expande desde el centro */
+.game-card:hover::before {
+  transform: translate(-50%, -50%) scale(2.5); /* Se expande e ilumina el fondo de la tarjeta */
+}
+
+/* Asegurar que el texto se mantenga legible por encima del destello */
+.game-info {
+  position: relative;
+  z-index: 2;
+}
+
+/* Botón interno: Se adapta al color veraniego al destacar la tarjeta */
+.game-card:hover .btn-play {
+  background: #d97706; /* Ámbar oscuro */
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  transform: scale(1.03);
+}
+
+/* Estilo base del botón */
 .btn-play {
-  background: #10b981;
+  background: #f59e0b; /* Color sol base */
   color: white;
   border: none;
   padding: 12px;
@@ -79,6 +128,9 @@
   font-weight: bold;
   cursor: pointer;
   margin-top: 1.5rem;
+  position: relative;
+  z-index: 2;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Footer / Aprende más */

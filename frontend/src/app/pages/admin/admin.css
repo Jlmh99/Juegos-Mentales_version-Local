@@ -241,3 +241,20 @@
 .modal-box select {
   width: 100%;
 }
+
+.section-divider { margin: 3rem 0; border: 0; border-top: 2px dashed #cbd5e1; }
+.audit-table {
+  width: 100%; border-collapse: collapse; margin-top: 1rem;
+  background: #ffffff; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.audit-table th, .audit-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.audit-table th { background: #0f172a; color: white; }
+.ip-block { background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-family: monospace; color: #334155; }
+.action-tag { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+.badge { padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
+.badge-active { background: #dcfce7; color: #15803d; }
+.badge-disabled { background: #fee2e2; color: #b91c1c; }
+.select-role { padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; }
+.btn-toggle { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.btn-toggle:hover { background: #e2e8f0; }
