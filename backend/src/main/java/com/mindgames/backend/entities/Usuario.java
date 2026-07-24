@@ -1,5 +1,7 @@
 package com.mindgames.backend.entities; // <-- Asegúrate que esto coincida con tus carpetas
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +22,9 @@ public class Usuario {
     private String username;
     @Column(unique = true)
     private String email;
+
+    // 🔐 Se puede recibir en el JSON de entrada, pero nunca se serializa de vuelta al cliente
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String rol;
     private boolean twoFactorEnabled;

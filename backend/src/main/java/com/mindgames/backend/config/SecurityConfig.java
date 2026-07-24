@@ -36,9 +36,15 @@ public class SecurityConfig {
                 
                 // 3. Rutas de Auth siempre libres
                 .requestMatchers("/api/auth/**").permitAll()
-                
-                // 4. NUEVO: Usuarios ahora requiere TOKEN (authenticated)
-                .requestMatchers("/api/users/**").hasRole("ADMIN") // Solo usuarios con rol ADMIN podrán entrar aquí 
+
+                // 4. NUEVO: Cada usuario autenticado puede ver/editar SU PROPIO perfil
+                //    (debe ir ANTES que la regla de ADMIN de abajo, más específica primero)
+                //    Se incluye la ruta exacta "/api/users/me" porque "/**" no siempre
+                //    cubre la ruta base sin segmento adicional.
+                .requestMatchers("/api/users/me", "/api/users/me/**").authenticated()
+
+                // 5. El resto de /api/users requiere rol ADMIN (gestión de todos los usuarios)
+                .requestMatchers("/api/users/**").hasRole("ADMIN") // Solo usuarios con rol ADMIN podrán entrar aquí
                 
                 // 5. El resto de la app protegida
                 .anyRequest().authenticated()

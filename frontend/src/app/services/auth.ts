@@ -64,4 +64,19 @@ export class AuthService {
     );
   }
 
+  // Perfil del usuario autenticado (no requiere ser ADMIN)
+  getMe(): Observable<any> {
+    return this.http.get('http://localhost:8080/api/users/me');
+  }
+
+  updateMe(data: any): Observable<any> {
+    return this.http.put('http://localhost:8080/api/users/me', data);
+  }
+
+  changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
+    return this.http.put('http://localhost:8080/api/users/me/password', data, {
+      responseType: 'text'
+    });
+  }
+
 }

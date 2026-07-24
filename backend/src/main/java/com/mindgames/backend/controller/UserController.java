@@ -2,6 +2,7 @@ package com.mindgames.backend.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindgames.backend.Repositories.UsuarioRepository;
+import com.mindgames.backend.config.JwtUtil;
 import com.mindgames.backend.entities.Usuario;
 
 @RestController
@@ -23,10 +25,74 @@ public class UserController {
 
     private final UsuarioRepository repo;
     private final PasswordEncoder encoder;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UsuarioRepository repo,PasswordEncoder encoder) {
+    public UserController(UsuarioRepository repo, PasswordEncoder encoder, JwtUtil jwtUtil) {
         this.repo = repo;
         this.encoder = encoder;
+        this.jwtUtil = jwtUtil;
+    }
+
+    // ==========================================================
+    // 👤 PERFIL DEL USUARIO AUTENTICADO (cualquier rol, no solo ADMIN)
+    // ==========================================================
+
+    @GetMapping("/me")
+    public ResponseEntity<?> obtenerPerfil(Principal principal) {
+        Usuario user = repo.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<?> actualizarPerfil(@RequestBody Usuario datos, Principal principal) {
+        Usuario user = repo.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (datos.getUsername() != null && !datos.getUsername().isBlank()) {
+            user.setUsername(datos.getUsername());
+        }
+
+        if (datos.getEmail() != null && !datos.getEmail().isBlank()
+                && !datos.getEmail().equalsIgnoreCase(user.getEmail())) {
+
+            if (repo.findByEmail(datos.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body("Ese correo ya está en uso por otro usuario");
+            }
+            user.setEmail(datos.getEmail());
+        }
+
+        repo.save(user);
+
+        // 🔥 El email pudo cambiar (es el "subject" del token), así que emitimos uno nuevo
+        String nuevoToken = jwtUtil.generarToken(user.getEmail(), user.getRol());
+
+        return ResponseEntity.ok(Map.of(
+                "usuario", user,
+                "token", nuevoToken
+        ));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<?> cambiarPassword(@RequestBody Map<String, String> body, Principal principal) {
+        Usuario user = repo.findByEmail(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        String actual = body.get("currentPassword");
+        String nueva = body.get("newPassword");
+
+        if (actual == null || actual.isBlank() || nueva == null || nueva.isBlank()) {
+            return ResponseEntity.badRequest().body("Debes indicar la contraseña actual y la nueva");
+        }
+
+        if (!encoder.matches(actual, user.getPassword())) {
+            return ResponseEntity.badRequest().body("La contraseña actual es incorrecta");
+        }
+
+        user.setPassword(encoder.encode(nueva));
+        repo.save(user);
+
+        return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
 
     @GetMapping
