@@ -58,6 +58,10 @@ export class AuthService {
     return this.http.put(`http://localhost:8080/api/users/${id}`, user);
   }
 
+  toggleEstadoUsuario(id: number) {
+    return this.http.patch(`http://localhost:8080/api/users/${id}/estado`, {});
+  }
+
     search(query: string) {
     return this.http.get<any[]>(
       `http://localhost:8080/api/search/${query}`

@@ -29,5 +29,9 @@ public class Usuario {
     private String rol;
     private boolean twoFactorEnabled;
 
+    // 🔐 Estado de la cuenta: true = habilitada (puede iniciar sesión), false = deshabilitada
+    @Column(columnDefinition = "boolean default true")
+    private boolean habilitado = true;
+
     // getters y setters
 }

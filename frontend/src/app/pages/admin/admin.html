@@ -59,6 +59,7 @@
           <th>Username</th>
           <th>Email</th>
           <th>Rol</th>
+          <th>Estado</th>
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
@@ -74,12 +75,27 @@
               {{ user.rol }}
             </span>
           </td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-active': user.habilitado,
+              'badge-disabled': !user.habilitado
+            }">
+              {{ user.habilitado ? 'Habilitado' : 'Deshabilitado' }}
+            </span>
+          </td>
           <td class="text-center">
             <button class="btn-edit" (click)="abrirModalEditar(user)">
               ✏️
             </button>
-            <button 
-              class="btn-delete" 
+            <button
+              class="btn-toggle"
+              (click)="toggleEstado(user)"
+              [disabled]="esUsuarioActual(user)"
+              [title]="esUsuarioActual(user) ? 'No puedes deshabilitar tu propia cuenta' : (user.habilitado ? 'Deshabilitar cuenta' : 'Habilitar cuenta')">
+              {{ user.habilitado ? '🔒' : '🔓' }}
+            </button>
+            <button
+              class="btn-delete"
               (click)="abrirModalEliminar(user)"
               [disabled]="esUsuarioActual(user)"
               title="No puedes eliminarte a ti mismo">

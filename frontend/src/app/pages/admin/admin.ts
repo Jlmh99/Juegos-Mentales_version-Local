@@ -159,6 +159,24 @@ export class Admin implements OnInit {
     this.usuarioAEliminar = null;
   }
 
+  toggleEstado(user: any) {
+    const accion = user.habilitado ? 'Deshabilitación de cuenta' : 'Habilitación de cuenta';
+    this.auth.toggleEstadoUsuario(user.id).subscribe({
+      next: (actualizado: any) => {
+        this.usuarios.set(
+          this.usuarios().map(u => u.id === actualizado.id ? actualizado : u)
+        );
+        this.registrarEventoAuditoria(accion, user.email);
+      },
+      error: (err) => {
+        console.error('Error al cambiar el estado del usuario:', err);
+        if (err.status === 400) {
+          alert(err.error || 'No se pudo cambiar el estado del usuario');
+        }
+      }
+    });
+  }
+
   esUsuarioActual(user: any): boolean {
     return user && this.usuarioActual && user.id === this.usuarioActual.id;
   }

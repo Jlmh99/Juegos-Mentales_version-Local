@@ -69,6 +69,11 @@ public class AuthController {
         if (!encoder.matches(login.getPassword(), user.getPassword()))
         return Map.of("mensaje", "Contraseña incorrecta");
 
+        // 🚫 Cuenta deshabilitada por un administrador: no puede iniciar sesión
+        if (!user.isHabilitado()) {
+            return Map.of("mensaje", "Tu cuenta está deshabilitada. Contacta a un administrador.");
+        }
+
         // 🔐 SI TIENE 2FA (Bloque integrado exactamente como lo pediste)
     if (user.isTwoFactorEnabled()) {
         String codigo = String.valueOf((int)(Math.random()*900000)+100000);
@@ -112,6 +117,10 @@ public class AuthController {
         Usuario user = repo.findByEmail(email).orElse(null);
 
         if (user == null) return Map.of("mensaje", "Usuario no encontrado");
+
+        if (!user.isHabilitado()) {
+            return Map.of("mensaje", "Tu cuenta está deshabilitada. Contacta a un administrador.");
+        }
 
         List<CodigoVerificacion> codigos = codigoRepo.findAll();
 
