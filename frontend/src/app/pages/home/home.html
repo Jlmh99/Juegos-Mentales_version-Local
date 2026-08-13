@@ -1,6 +1,6 @@
 <div class="home-wrapper" [ngClass]="currentSeasonClass()">
   
-  <div *ngIf="currentSeasonClass() === 'summer-event-theme'" class="top-calendar-banner">
+  <div *ngIf="announcementBanner()" class="top-calendar-banner">
     <p>{{ announcementBanner() }}</p>
   </div>
 

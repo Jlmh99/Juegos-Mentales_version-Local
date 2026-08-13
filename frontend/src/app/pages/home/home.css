@@ -143,19 +143,30 @@
 /* ESTILOS ADICIONALES PARA LA PRÁCTICA 8 (CALENDARIO)    */
 /* ======================================================= */
 
-/* Estado normal de la interfaz en home */
-.normal-season {
-  background-color: #f1f5f9;
+/* Fondo de la interfaz según la estación / evento activo */
+.season-winter {
+  background-color: #e0f2fe; /* Azul hielo */
 }
 
-/* Interfaz alterada visualmente por el Evento Calendarizado */
-.summer-event-theme {
-  background-color: #fef3c7; /* Cambia el fondo gris a un tono arena/cálido de verano */
+.season-spring {
+  background-color: #f0fdf4; /* Verde pastel muy claro */
 }
 
-/* Diseño del Banner Estacional */
+.season-summer {
+  background-color: #fef3c7; /* Arena / cálido de verano */
+}
+
+.season-autumn {
+  background-color: #fdf1e3; /* Tostado / hojas de otoño */
+}
+
+.season-independence {
+  background-color: #f0fdf4; /* Base clara, el acento va en el banner */
+}
+
+/* Diseño base del Banner Estacional */
 .top-calendar-banner {
-  background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%); /* Degradado llamativo de naranja a rojo */
+  background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%); /* Verano por defecto */
   color: white;
   text-align: center;
   padding: 12px;
@@ -163,4 +174,27 @@
   font-size: 1.05rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   letter-spacing: 0.5px;
+}
+
+/* Cada tema pinta el banner con su propia paleta */
+.season-winter .top-calendar-banner {
+  background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 100%);
+}
+
+.season-spring .top-calendar-banner {
+  background: linear-gradient(90deg, #ec4899 0%, #22c55e 100%);
+}
+
+.season-summer .top-calendar-banner {
+  background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.season-autumn .top-calendar-banner {
+  background: linear-gradient(90deg, #b45309 0%, #92400e 100%);
+}
+
+.season-independence .top-calendar-banner {
+  background: #006341; /* Verde bandera */
+  border-top: 4px solid #ffffff;
+  border-bottom: 4px solid #ce1126; /* Rojo bandera */
 }
