@@ -1,0 +1,51 @@
+<footer class="app-footer">
+  <div class="footer-top">
+
+    <!-- A. Identidad y Marca -->
+    <div class="footer-col brand-col">
+      <div class="footer-logo">🧠 Mind Games</div>
+      <p class="tagline">Ejercita tu mente con juegos cognitivos diarios.</p>
+    </div>
+
+    <!-- B. Información Legal -->
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a routerLink="/legal/terminos">Términos y Condiciones</a></li>
+        <li><a routerLink="/legal/privacidad">Política de Privacidad</a></li>
+        <li><a routerLink="/legal/cookies">Política de Cookies</a></li>
+      </ul>
+    </div>
+
+    <!-- C. Soporte -->
+    <div class="footer-col">
+      <h4>Soporte</h4>
+      <ul>
+        <li><a routerLink="/soporte/contacto">Contacto</a></li>
+        <li><a routerLink="/soporte/faq">Preguntas Frecuentes</a></li>
+        <li><a routerLink="/soporte/ayuda">Ayuda y Soporte</a></li>
+      </ul>
+    </div>
+
+    <!-- D. Redes Sociales -->
+    <div class="footer-col">
+      <h4>Síguenos</h4>
+      <div class="social-icons">
+        <!-- TODO: cuando exista la URL real de cada red, envolver el <svg> en
+             <a [href]="red.url" target="_blank" rel="noopener noreferrer"> -->
+        <span
+          *ngFor="let red of redesSociales"
+          class="social-icon"
+          [title]="red.nombre + ' (próximamente)'">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path [attr.d]="red.icono"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ anioActual }} Mind Games. Todos los derechos reservados.</p>
+  </div>
+</footer>

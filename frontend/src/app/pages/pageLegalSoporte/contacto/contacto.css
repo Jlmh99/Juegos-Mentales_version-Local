@@ -1,0 +1,82 @@
+.legal-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.legal-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 700px;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.legal-card h2 {
+  color: #0f172a;
+  margin-top: 0;
+}
+
+.btn-back {
+  background: #64748b;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.contact-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.contact-item a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-item a:hover {
+  text-decoration: underline;
+}
+
+.contact-note {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.contact-note a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-note a:hover {
+  text-decoration: underline;
+}

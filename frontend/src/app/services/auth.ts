@@ -62,6 +62,13 @@ export class AuthService {
     return this.http.patch(`http://localhost:8080/api/users/${id}/estado`, {});
   }
 
+  // Formulario "Ayuda y Soporte" del footer (público, no requiere sesión)
+  enviarSoporte(data: { nombre: string; correo: string; mensaje: string }): Observable<any> {
+    return this.http.post('http://localhost:8080/api/soporte', data, {
+      responseType: 'text'
+    });
+  }
+
     search(query: string) {
     return this.http.get<any[]>(
       `http://localhost:8080/api/search/${query}`

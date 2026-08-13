@@ -6,6 +6,12 @@ import { Crucigrama } from './pages/crucigrama/crucigrama';
 import { DomDemo } from './pages/dom-demo/dom-demo';
 import { Home } from './pages/home/home';
 import { Login } from './pages/login/login';
+import { AyudaSoporte } from './pages/pageLegalSoporte/ayuda-soporte/ayuda-soporte';
+import { Contacto } from './pages/pageLegalSoporte/contacto/contacto';
+import { Cookies } from './pages/pageLegalSoporte/cookies/cookies';
+import { Faq } from './pages/pageLegalSoporte/faq/faq';
+import { Privacidad } from './pages/pageLegalSoporte/privacidad/privacidad';
+import { Terminos } from './pages/pageLegalSoporte/terminos/terminos';
 import { Profile } from './pages/profile/profile';
 import { Register } from './pages/register/register';
 import { Sudoku } from './pages/sudoku/sudoku';
@@ -17,6 +23,14 @@ export const routes: Routes = [
     { path: 'register', component: Register },
     { path: 'sudoku', component: Sudoku },
     { path: 'crucigrama', component: Crucigrama },
+
+    // 1.1 Rutas Legales / Soporte del footer (públicas: el footer se ve sin sesión también)
+    { path: 'legal/terminos', component: Terminos },
+    { path: 'legal/privacidad', component: Privacidad },
+    { path: 'legal/cookies', component: Cookies },
+    { path: 'soporte/contacto', component: Contacto },
+    { path: 'soporte/faq', component: Faq },
+    { path: 'soporte/ayuda', component: AyudaSoporte },
 
     // 2. Rutas Protegidas (Requieren Login)
     { 

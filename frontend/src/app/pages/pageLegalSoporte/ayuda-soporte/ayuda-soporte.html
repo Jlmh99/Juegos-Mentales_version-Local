@@ -1,0 +1,28 @@
+<div class="legal-container">
+  <div class="legal-card">
+    <button class="btn-back" (click)="regresar()">⬅️ Volver</button>
+    <h2>🛟 Ayuda y Soporte</h2>
+    <p>Describe tu duda o problema y nuestro equipo lo revisará.</p>
+
+    <div *ngIf="exito()" class="alert success">✅ Tu solicitud fue enviada. Te contactaremos pronto.</div>
+    <div *ngIf="error()" class="alert danger">{{ error() }}</div>
+
+    <form [formGroup]="soporteForm" (ngSubmit)="enviar()">
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" formControlName="nombre" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico:</label>
+        <input type="email" formControlName="correo" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Mensaje:</label>
+        <textarea formControlName="mensaje" class="form-control" rows="5"></textarea>
+      </div>
+      <button type="submit" class="btn-save" [disabled]="soporteForm.invalid || enviando()">
+        {{ enviando() ? 'Enviando...' : 'Enviar solicitud' }}
+      </button>
+    </form>
+  </div>
+</div>

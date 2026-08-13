@@ -242,6 +242,11 @@ Version Local
 │  │  │  │  │  ├─ login.html
 │  │  │  │  │  ├─ login.spec.ts
 │  │  │  │  │  └─ login.ts
+│  │  │  │  ├─ profile
+│  │  │  │  │  ├─ profile.css
+│  │  │  │  │  ├─ profile.html
+│  │  │  │  │  ├─ profile.spec.ts
+│  │  │  │  │  └─ profile.ts
 │  │  │  │  ├─ register
 │  │  │  │  │  ├─ register.css
 │  │  │  │  │  ├─ register.html

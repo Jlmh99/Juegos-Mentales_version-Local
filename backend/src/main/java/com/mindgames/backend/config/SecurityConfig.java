@@ -37,6 +37,9 @@ public class SecurityConfig {
                 // 3. Rutas de Auth siempre libres
                 .requestMatchers("/api/auth/**").permitAll()
 
+                // 3.1 Formulario de Ayuda y Soporte del footer: público (con o sin sesión)
+                .requestMatchers("/api/soporte/**").permitAll()
+
                 // 4. NUEVO: Cada usuario autenticado puede ver/editar SU PROPIO perfil
                 //    (debe ir ANTES que la regla de ADMIN de abajo, más específica primero)
                 //    Se incluye la ruta exacta "/api/users/me" porque "/**" no siempre
