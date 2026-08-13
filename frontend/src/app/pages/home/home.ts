@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { AuthService } from '../../services/auth';
@@ -8,7 +7,7 @@ import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -17,10 +16,12 @@ export class Home implements OnInit {
   mensajeBackend = signal('');
 
   // =======================
-  // BUSCADOR ELASTICSEARCH
+  // BUSCADOR: local (juegos de la página) vs Wikipedia (Elasticsearch)
   // =======================
-  elasticQuery = '';
-  elasticResultados: any[] = [];
+  modoBusqueda = signal<'local' | 'wikipedia'>('local');
+  elasticResultados = signal<any[]>([]);
+  buscandoWikipedia = signal(false);
+  errorWikipedia = signal('');
 
   // ==========================================
   // PRÁCTICA 8: EVENTO BASADO EN PERIODO (CALENDARIO)
@@ -110,11 +111,42 @@ export class Home implements OnInit {
     )
   );
 
-  buscarElastic() {
-    this.auth.search(this.elasticQuery)
-      .subscribe({
-        next: (data) => { this.elasticResultados = data; },
-        error: (err) => { console.error('Error Elastic:', err); }
-      });
+  alternarModoBusqueda() {
+    this.modoBusqueda.set(this.modoBusqueda() === 'local' ? 'wikipedia' : 'local');
+    this.errorWikipedia.set('');
+
+    if (this.modoBusqueda() === 'wikipedia' && this.searchText().trim()) {
+      this.buscarWikipedia();
+    }
+  }
+
+  onEnterBusqueda() {
+    if (this.modoBusqueda() === 'wikipedia') {
+      this.buscarWikipedia();
+    }
+  }
+
+  buscarWikipedia() {
+    const query = this.searchText().trim();
+
+    if (!query) {
+      this.elasticResultados.set([]);
+      return;
+    }
+
+    this.buscandoWikipedia.set(true);
+    this.errorWikipedia.set('');
+
+    this.auth.search(query).subscribe({
+      next: (data) => {
+        this.elasticResultados.set(data);
+        this.buscandoWikipedia.set(false);
+      },
+      error: (err) => {
+        console.error('Error al buscar en Wikipedia:', err);
+        this.errorWikipedia.set('No se pudo completar la búsqueda. Intenta de nuevo.');
+        this.buscandoWikipedia.set(false);
+      }
+    });
   }
 }

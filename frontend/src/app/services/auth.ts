@@ -71,7 +71,7 @@ export class AuthService {
 
     search(query: string) {
     return this.http.get<any[]>(
-      `http://localhost:8080/api/search/${query}`
+      `http://localhost:8080/api/search/${encodeURIComponent(query)}`
     );
   }
 

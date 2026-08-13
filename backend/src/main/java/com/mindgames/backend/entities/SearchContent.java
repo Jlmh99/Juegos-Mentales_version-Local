@@ -11,13 +11,15 @@ public class SearchContent {
 
     private String titulo;
     private String descripcion;
+    private String url;
 
     public SearchContent() {}
 
-    public SearchContent(String id, String titulo, String descripcion) {
+    public SearchContent(String id, String titulo, String descripcion, String url) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.url = url;
     }
 
     public String getId() {
@@ -30,5 +32,9 @@ public class SearchContent {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

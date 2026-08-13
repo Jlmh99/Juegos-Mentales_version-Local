@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mindgames.backend.Repositories.SearchRepository;
 import com.mindgames.backend.entities.SearchContent;
+import com.mindgames.backend.services.WikipediaSearchService;
 
 @RestController
 @RequestMapping("/api/search")
@@ -20,12 +21,24 @@ public class SearchController {
     @Autowired
     private SearchRepository repository;
 
+    @Autowired
+    private WikipediaSearchService wikipediaSearchService;
+
     @GetMapping("/{query}")
     public List<SearchContent> buscar(@PathVariable String query) {
 
-        return repository.findByTituloContainingOrDescripcionContaining(
-            query,
-            query
-        );
+        // Búsqueda real fuera de la página: Wikipedia en vivo
+        List<SearchContent> resultados = wikipediaSearchService.buscar(query, 10);
+
+        // Indexamos lo encontrado en Elasticsearch (si no está disponible, no rompe la búsqueda)
+        try {
+            if (!resultados.isEmpty()) {
+                repository.saveAll(resultados);
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ No se pudo indexar en Elasticsearch: " + e.getMessage());
+        }
+
+        return resultados;
     }
 }

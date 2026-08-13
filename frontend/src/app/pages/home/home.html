@@ -10,17 +10,32 @@
       <p class="subtitle">Explora, aprende y entrena tu mente</p>
       
       <div class="search-container">
-        <i class="pi pi-search"></i>
+        <span class="search-icon">🔍</span>
         <input
           type="text"
-          placeholder="¿Qué quieres jugar hoy?"
+          [placeholder]="modoBusqueda() === 'local' ? '¿Qué quieres jugar hoy?' : 'Buscar en Wikipedia... (Enter)'"
+          [value]="searchText()"
           (input)="searchText.set($any($event.target).value)"
+          (keyup.enter)="onEnterBusqueda()"
           class="search-bar"
         />
+
+        <button
+          type="button"
+          class="search-mode-toggle"
+          [class.mode-wikipedia]="modoBusqueda() === 'wikipedia'"
+          (click)="alternarModoBusqueda()"
+          title="Cambiar entre juegos de la página y búsqueda en Wikipedia"
+        >
+          <span class="toggle-option">🎮 Juegos</span>
+          <span class="toggle-option">🌐 Wikipedia</span>
+          <span class="toggle-thumb"></span>
+        </button>
       </div>
     </header>
 
-    <section class="games-grid">
+    <!-- Modo local: juegos disponibles en la página -->
+    <section class="games-grid" *ngIf="modoBusqueda() === 'local'">
       <div *ngFor="let juego of juegosFiltrados()" class="game-card">
         <div class="game-info">
           <h3>{{ juego.nombre }}</h3>
@@ -32,25 +47,28 @@
       </div>
     </section>
 
-    <hr>
-    <h2>Buscador Avanzado con Elasticsearch</h2>
-    <div class="elastic-container">
-      <input
-        type="text"
-        placeholder="Buscar con Elasticsearch..."
-        [(ngModel)]="elasticQuery"
-      >
-      <button (click)="buscarElastic()">
-        Buscar en Elasticsearch
-      </button>
-    </div>
+    <!-- Modo Wikipedia: búsqueda real fuera de la página (vía Elasticsearch) -->
+    <section class="games-grid wiki-results" *ngIf="modoBusqueda() === 'wikipedia'">
+      <p *ngIf="buscandoWikipedia()" class="search-status">🔎 Buscando en Wikipedia...</p>
+      <p *ngIf="errorWikipedia()" class="search-status error">{{ errorWikipedia() }}</p>
+      <p *ngIf="!buscandoWikipedia() && !errorWikipedia() && elasticResultados().length === 0" class="search-status">
+        Escribe un término y presiona Enter para buscar en Wikipedia.
+      </p>
 
-    <div class="elastic-results">
-      <div class="elastic-card" *ngFor="let item of elasticResultados">
-        <h3>{{ item.titulo }}</h3>
-        <p>{{ item.descripcion }}</p>
-      </div>
-    </div>
+      <a
+        *ngFor="let item of elasticResultados()"
+        [href]="item.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="game-card wiki-card"
+      >
+        <div class="game-info">
+          <h3>{{ item.titulo }}</h3>
+          <p>{{ item.descripcion }}</p>
+        </div>
+        <span class="btn-play">Ver en Wikipedia ↗</span>
+      </a>
+    </section>
 
     <footer class="learning-section">
       <h3>Aprende más</h3>

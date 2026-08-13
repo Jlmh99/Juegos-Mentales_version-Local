@@ -14,13 +14,22 @@
 }
 
 .search-container {
-  max-width: 500px;
+  max-width: 640px;
   margin: 1.5rem auto;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.search-icon {
+  font-size: 1.1rem;
 }
 
 .search-bar {
-  width: 100%;
+  flex: 1;
+  min-width: 220px;
   padding: 15px 20px;
   border-radius: 30px;
   border: 2px solid #e2e8f0;
@@ -30,6 +39,85 @@
 }
 
 .search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59,130,246,0.1); }
+
+/* Toggle de modo de búsqueda: local (juegos) vs Wikipedia */
+.search-mode-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 40px;
+  padding: 3px;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  background: #3b82f6;
+  border-radius: 18px;
+  transition: transform 0.25s ease;
+  z-index: 1;
+}
+
+.search-mode-toggle.mode-wikipedia .toggle-thumb {
+  transform: translateX(100%);
+  background: #10b981;
+}
+
+.search-mode-toggle.mode-wikipedia .toggle-option:first-child,
+.search-mode-toggle:not(.mode-wikipedia) .toggle-option:last-child {
+  color: #64748b;
+}
+
+.search-mode-toggle.mode-wikipedia .toggle-option:last-child,
+.search-mode-toggle:not(.mode-wikipedia) .toggle-option:first-child {
+  color: white;
+}
+
+/* Resultados de Wikipedia */
+.search-status {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+  padding: 1rem;
+}
+
+.search-status.error {
+  color: #dc2626;
+}
+
+.wiki-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.wiki-card .btn-play {
+  background: #10b981;
+}
+
+.wiki-card:hover .btn-play {
+  background: #059669;
+}
 
 /* Cuadrícula de Juegos */
 .games-grid {
