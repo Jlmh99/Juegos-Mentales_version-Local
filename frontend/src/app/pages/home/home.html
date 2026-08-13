@@ -4,39 +4,6 @@
     <p>{{ announcementBanner() }}</p>
   </div>
 
-  <nav class="navbar">
-    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
-    
-    <div class="nav-links">
-      <div class="menu-pointer-container" (mouseleave)="closeGameMenu()">
-        <button class="btn-nav menu-trigger-btn" (mouseenter)="openGameMenu()">
-          🎮 Categorías/Juegos ▾
-        </button>
-        
-        <div class="games-dropdown" [class.show-dropdown]="isGameMenuOpen()">
-          <a routerLink="/sudoku" class="dropdown-item">🔢 Sudoku</a>
-          <a routerLink="/crucigrama" class="dropdown-item">🧩 Crucigrama</a>
-        </div>
-      </div>
-
-      <button routerLink="/dom-demo" class="btn-nav">🎨 DOM Demo</button>
-      <button routerLink="/task-manager" class="btn-nav">✅ Tareas</button>
-    </div>
-
-
-    <div class="nav-actions">
-      <button routerLink="/profile" class="btn-nav" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">
-        👤 Mi Perfil
-      </button>
-      <button *ngIf="esAdmin()" routerLink="/admin" class="btn-admin">
-        <i class="pi pi-cog"></i> Panel Admin
-      </button>
-      <button (click)="logout()" class="btn-logout">
-        🚪 Cerrar Sesión
-      </button>
-    </div>
-  </nav>
-
   <div class="main-content">
     <header class="hero-section">
       <h1>¡Hola, Jugador!</h1>

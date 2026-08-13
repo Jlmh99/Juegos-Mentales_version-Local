@@ -1,18 +1,16 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
 export class Admin implements OnInit {
-  private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
 
   mostrarModal = false;
@@ -181,19 +179,4 @@ export class Admin implements OnInit {
     return user && this.usuarioActual && user.id === this.usuarioActual.id;
   }
 
-  esAdmin(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      return user.rol === 'ADMIN';
-    }
-    return false;
-  }
-
-  logout() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.registrarEventoAuditoria('Cierre de sesión', this.usuarioActual.email || 'ADMIN');
-      localStorage.removeItem('user');
-      this.router.navigate(['/login']);
-    }
-  }
 }

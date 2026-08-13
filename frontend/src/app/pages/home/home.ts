@@ -1,7 +1,7 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { AuthService } from '../../services/auth';
 
@@ -13,9 +13,6 @@ import { AuthService } from '../../services/auth';
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-  private platformId = inject(PLATFORM_ID);
-  private router = inject(Router);
-  
   protected readonly title = signal('frontend');
   mensajeBackend = signal('');
 
@@ -24,11 +21,6 @@ export class Home implements OnInit {
   // =======================
   elasticQuery = '';
   elasticResultados: any[] = [];
-
-  // ==========================================
-  // PRÁCTICA 7: MENÚ BASADO EN EVENTOS DE PUNTERO
-  // ==========================================
-  isGameMenuOpen = signal(false);
 
   // ==========================================
   // PRÁCTICA 8: EVENTO BASADO EN PERIODO (CALENDARIO)
@@ -67,9 +59,6 @@ export class Home implements OnInit {
     }
   }
 
-  openGameMenu() { this.isGameMenuOpen.set(true); }
-  closeGameMenu() { this.isGameMenuOpen.set(false); }
-
   searchText = signal('');
   juegos = signal([
     { nombre: 'Sudoku', descripcion: 'Juego lógico numérico que estimula la mente.', ruta: '#' },
@@ -81,21 +70,6 @@ export class Home implements OnInit {
       juego.nombre.toLowerCase().includes(this.searchText().toLowerCase())
     )
   );
-
-  esAdmin(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      return user.rol === 'ADMIN';
-    }
-    return false;
-  }
-
-  logout() {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('user');
-      this.router.navigate(['/login']);
-    }
-  }
 
   buscarElastic() {
     this.auth.search(this.elasticQuery)

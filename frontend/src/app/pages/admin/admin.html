@@ -1,16 +1,4 @@
 <div class="admin-layout">
-  <nav class="navbar">
-    <div class="nav-brand" routerLink="/home">🧠 Mind Games</div>
-    <div class="nav-actions">
-      <button *ngIf="esAdmin()" routerLink="/admin" class="btn-admin">
-        <i class="pi pi-cog"></i> Panel Admin
-      </button>
-      <button (click)="logout()" class="btn-logout">
-        🚪 Cerrar Sesión
-      </button>
-    </div>
-  </nav>
-
   <section class="admin-card">
     <div class="card-header">
       <i class="pi pi-user-plus"></i>

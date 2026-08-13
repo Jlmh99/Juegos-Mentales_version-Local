@@ -6,34 +6,6 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.nav-brand {
-  font-size: 1.4rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: #a78bfa;
-}
-
-.btn-back {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-back:hover { background: rgba(255,255,255,0.2); }
-
 .main-content {
   max-width: 900px;
   margin: 0 auto;

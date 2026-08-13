@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 interface Tarea {
   id: number;
@@ -14,7 +13,7 @@ interface Tarea {
 @Component({
   selector: 'app-task-manager',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './task-manager.html',
   styleUrl: './task-manager.css'
 })
