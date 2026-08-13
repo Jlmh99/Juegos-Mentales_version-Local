@@ -1,0 +1,4 @@
+# Archivos con credenciales/secretos: nunca deben subirse al repositorio
+Clave API de brevo.txt
+*.env
+.env.*
